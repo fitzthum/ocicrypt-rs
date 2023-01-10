@@ -187,17 +187,20 @@ pub fn decrypt_layer_key_opts_data(
                 priv_key_given = true;
             }
 
-            if let Ok(opts_data) = pre_unwrap_key(keywrapper, dc, &b64_annotation) {
-                if !opts_data.is_empty() {
-                    return Ok(opts_data);
+            match pre_unwrap_key(keywrapper, dc, &b64_annotation) {
+                Ok(opts_data) => {
+                    if !opts_data.is_empty() {
+                        return Ok(opts_data);
+                    }
                 }
+                Err(e) => return Err(anyhow!("tobin: pre_unwrap_key failed with: {}", e))  
             }
             // try next keywrapper
         }
     }
 
     if !priv_key_given {
-        return Err(anyhow!("missing private key needed for decryption"));
+        return Err(anyhow!("tobin: missing private key needed for decryption"));
     }
 
     Err(anyhow!(
