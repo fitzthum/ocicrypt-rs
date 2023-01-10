@@ -112,9 +112,9 @@ impl KeyProviderKeyWrapProtocolOutput {
 
             OpKey::Unwrap => client.un_wrap_key(request).await.map_err(|e| {
                 anyhow!(
-                    "keyprovider: error from grpc server for {} operation, {}",
-                    OpKey::Unwrap,
-                    e
+                    "keyprovider: error from grpc server for {:?} operation: {}",
+                    OpKey::Unwrap.to_string(),
+                    e.to_string()
                 )
             })?,
         };
